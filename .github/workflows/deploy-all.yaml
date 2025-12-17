@@ -13,11 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ✅ IMPORTANT:
-      # Copy/paste the *exact* cloud login + kube context steps
-      # from one of your existing workflows (gateway/metadata/etc.)
-      # right here. (Example: azure/login + az aks get-credentials, etc.)
-
       - name: Deploy shared infrastructure (mongodb, rabbit)
         run: ./scripts/cd/infrastructure.sh
 
