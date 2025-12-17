@@ -1,0 +1,40 @@
+name: Deploy FlixTube (All)
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: flixTube-deploy-all
+  cancel-in-progress: false
+
+jobs:
+  deploy-all:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # auth to cloud / kubeconfig setup (same as your existing workflows)
+      - name: Set kube context
+        run: ./scripts/cd/kubeconfig.sh
+
+      - name: Deploy shared infrastructure
+        run: ./scripts/cd/infrastructure.sh
+
+      - name: Deploy mock-storage
+        run: ./scripts/cd/mock-storage.sh
+
+      - name: Deploy metadata
+        run: ./scripts/cd/metadata.sh
+
+      - name: Deploy history
+        run: ./scripts/cd/history.sh
+
+      - name: Deploy video-upload
+        run: ./scripts/cd/video-upload.sh
+
+      - name: Deploy video-streaming
+        run: ./scripts/cd/video-streaming.sh
+
+      - name: Deploy gateway
+        run: ./scripts/cd/gateway.sh
+
