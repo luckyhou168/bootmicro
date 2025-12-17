@@ -13,11 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # auth to cloud / kubeconfig setup (same as your existing workflows)
-      - name: Set kube context
-        run: ./scripts/cd/kubeconfig.sh
+      # ✅ IMPORTANT:
+      # Copy/paste the *exact* cloud login + kube context steps
+      # from one of your existing workflows (gateway/metadata/etc.)
+      # right here. (Example: azure/login + az aks get-credentials, etc.)
 
-      - name: Deploy shared infrastructure
+      - name: Deploy shared infrastructure (mongodb, rabbit)
         run: ./scripts/cd/infrastructure.sh
 
       - name: Deploy mock-storage
@@ -35,6 +36,6 @@ jobs:
       - name: Deploy video-streaming
         run: ./scripts/cd/video-streaming.sh
 
-      - name: Deploy gateway
+      - name: Deploy gateway (last)
         run: ./scripts/cd/gateway.sh
 
