@@ -21,6 +21,7 @@ jobs:
       REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
       NAME: history
       DIRECTORY: history
+      KUBECTL_VERSION: ${{ secrets.KUBECTL_VERSION }}  
 
     steps:
       
@@ -32,10 +33,18 @@ jobs:
       - name: Publish
         run: ./scripts/cd/push-image.sh
 
-      - uses: tale/kubectl-action@v1
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
         with:
-          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-          kubectl-version: v1.24.2
+          version: ${{ env.KUBECTL_VERSION }}
+
+      - name: Configure kubeconfig
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.kube
+          printf '%s' "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config    
       
       - name: Deploy
         run: ./scripts/cd/deploy.sh
