@@ -10,7 +10,7 @@ concurrency:
 jobs:
   deploy-all:
     runs-on: ubuntu-latest
-    
+
     env:
       VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
@@ -32,38 +32,81 @@ jobs:
           set -euo pipefail
           mkdir -p ~/.kube
           printf '%s' "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
-          chmod 600 ~/.kube/config  
+          chmod 600 ~/.kube/config
 
-      - name: Deploy rabbit and mongodb
-        run: ./scripts/cd/infrastructure.sh
+      # Infrastructure first
+      - name: Deploy MongoDB
+        run: kubectl apply -f ./scripts/cd/mongodb.yaml
 
+      - name: Deploy Rabbit
+        run: kubectl apply -f ./scripts/cd/rabbit.yaml
+
+      # Service deploy helper pattern: build -> push -> apply
       - name: Deploy mock-storage
         env:
           NAME: mock-storage
-        run: ./scripts/cd/deploy.sh
+          DIRECTORY: mock-storage
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
 
       - name: Deploy metadata
         env:
           NAME: metadata
-        run: ./scripts/cd/deploy.sh
+          DIRECTORY: metadata
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
 
       - name: Deploy history
         env:
           NAME: history
-        run: ./scripts/cd/deploy.sh
+          DIRECTORY: history
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
 
       - name: Deploy video-upload
         env:
           NAME: video-upload
-        run: ./scripts/cd/deploy.sh
+          DIRECTORY: video-upload
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
 
       - name: Deploy video-streaming
         env:
           NAME: video-streaming
-        run: ./scripts/cd/deploy.sh
+          DIRECTORY: video-streaming
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
 
-      - name: Deploy gateway
+      - name: Deploy gateway (last)
         env:
           NAME: gateway
-        run: ./scripts/cd/deploy.sh
+          DIRECTORY: gateway
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
+
+      - name: Show rollout status
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl get deploy -o wide
+          kubectl get pods -o wide
+          kubectl get svc -o wide
 
