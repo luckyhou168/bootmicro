@@ -38,7 +38,9 @@ jobs:
         run: ./scripts/cd/infrastructure.sh
 
       - name: Deploy mock-storage
-        run: ./scripts/cd/mock-storage.yaml
+        env:
+          NAME: mock-storage
+        run: ./scripts/cd/deploy.sh
 
       - name: Deploy metadata
         run: ./scripts/cd/metadata.yaml
