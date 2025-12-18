@@ -43,17 +43,27 @@ jobs:
         run: ./scripts/cd/deploy.sh
 
       - name: Deploy metadata
-        run: ./scripts/cd/metadata.yaml
+        env:
+          NAME: metadata
+        run: ./scripts/cd/deploy.sh
 
       - name: Deploy history
-        run: ./scripts/cd/history.yaml
+        env:
+          NAME: history
+        run: ./scripts/cd/deploy.sh
 
       - name: Deploy video-upload
-        run: ./scripts/cd/video-upload.yaml
+        env:
+          NAME: video-upload
+        run: ./scripts/cd/deploy.sh
 
       - name: Deploy video-streaming
-        run: ./scripts/cd/video-streaming.yaml
+        env:
+          NAME: video-streaming
+        run: ./scripts/cd/deploy.sh
 
-      - name: Deploy gateway (last)
-        run: ./scripts/cd/gateway.yaml
+      - name: Deploy gateway
+        env:
+          NAME: gateway
+        run: ./scripts/cd/deploy.sh
 
