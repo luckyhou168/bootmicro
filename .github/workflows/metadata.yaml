@@ -33,7 +33,7 @@ jobs:
         run: ./scripts/cd/push-image.sh
       
       - name: Install kubectl
-        uses: azure/setup-kubectl$v4
+        uses: azure/setup-kubectl@v4
         with:
           version: ${{ secrets.KUBECTL_VERSION }}
 
