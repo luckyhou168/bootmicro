@@ -16,8 +16,6 @@ jobs:
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
       REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
-      NAME: mock-storage
-      DIRECTORY: mock-storage
       KUBECTL_VERSION: ${{ secrets.KUBECTL_VERSION }}
 
     steps:
@@ -40,20 +38,20 @@ jobs:
         run: ./scripts/cd/infrastructure.sh
 
       - name: Deploy mock-storage
-        run: ./scripts/cd/mock-storage.sh
+        run: ./scripts/cd/mock-storage.yaml
 
       - name: Deploy metadata
-        run: ./scripts/cd/metadata.sh
+        run: ./scripts/cd/metadata.yaml
 
       - name: Deploy history
-        run: ./scripts/cd/history.sh
+        run: ./scripts/cd/history.yaml
 
       - name: Deploy video-upload
-        run: ./scripts/cd/video-upload.sh
+        run: ./scripts/cd/video-upload.yaml
 
       - name: Deploy video-streaming
-        run: ./scripts/cd/video-streaming.sh
+        run: ./scripts/cd/video-streaming.yaml
 
       - name: Deploy gateway (last)
-        run: ./scripts/cd/gateway.sh
+        run: ./scripts/cd/gateway.yaml
 
