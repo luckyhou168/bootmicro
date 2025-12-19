@@ -12,3 +12,7 @@ variable location {
 variable kubernetes_version {    
   default = "1.34.1"
 }
+
+variable "azure_subscription_id" {
+  type=string
+}
