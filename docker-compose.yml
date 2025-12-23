@@ -38,6 +38,22 @@ services:
       - db
     restart: always
 
+  frontend:
+    image: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-dev
+    container_name: frontend
+    volumes:
+      - /tmp/frontend/npm-cache:/root/.npm:z
+      - ./frontend:/usr/src/app:z
+      - frontend_node_modules:/usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    restart: "no"    
+
   gateway:
     image: gateway
     build: 
@@ -46,7 +62,7 @@ services:
     container_name: gateway
     volumes:
       - /tmp/gateway/npm-cache:/root/.npm:z
-      - ./gateway/src:/usr/src/app/src:z
+      - ./gateway/src:/usr/src/app:z
       - ./gateway/public:/usr/src/app/public:z
     ports:
       - "4000:80"
@@ -185,3 +201,6 @@ services:
       - db
       - rabbit
     restart: "no"
+
+volumes:
+  frontend_node_modules:  
