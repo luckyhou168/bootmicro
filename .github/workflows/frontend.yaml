@@ -1,0 +1,28 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - frontend/**
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.sha }}
+      CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
+      NAME: frontend
+      DIRECTORY: frontend
+      KUBECTL_VERSION: ${{ secrets.KUBECTL_VERSION }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Image
+        run: ./scripts/cd/build-image.sh
