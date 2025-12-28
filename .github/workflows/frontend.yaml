@@ -29,3 +29,6 @@ jobs:
 
       - name: Publish Image
         run: ./scripts/cd/push-image.sh
+
+      - name: Deploy image
+        run: ./scripts/cd/deploy.sh
