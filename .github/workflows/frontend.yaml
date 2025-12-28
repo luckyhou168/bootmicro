@@ -26,3 +26,6 @@ jobs:
 
       - name: Build Image
         run: ./scripts/cd/build-image.sh
+
+      - name: Publish Image
+        run: ./scripts/cd/publish-image.sh
