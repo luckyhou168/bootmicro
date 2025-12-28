@@ -92,6 +92,16 @@ jobs:
           ./scripts/cd/push-image.sh
           ./scripts/cd/deploy.sh
 
+      - name: Deploy frontend
+        env:
+          NAME: frontend
+          DIRECTORY: frontend
+        run: |
+          set -euo pipefail
+          ./scripts/cd/build-image.sh
+          ./scripts/cd/push-image.sh
+          ./scripts/cd/deploy.sh
+
       - name: Deploy gateway (last)
         env:
           NAME: gateway
@@ -109,4 +119,3 @@ jobs:
           kubectl get deploy -o wide
           kubectl get pods -o wide
           kubectl get svc -o wide
-
