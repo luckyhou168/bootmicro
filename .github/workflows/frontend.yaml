@@ -28,4 +28,4 @@ jobs:
         run: ./scripts/cd/build-image.sh
 
       - name: Publish Image
-        run: ./scripts/cd/publish-image.sh
+        run: ./scripts/cd/push-image.sh
