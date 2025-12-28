@@ -30,5 +30,18 @@ jobs:
       - name: Publish Image
         run: ./scripts/cd/push-image.sh
 
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: ${{ secrets.KUBECTL_VERSION }}
+
+      - name: Configure kubeconfig
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.kube
+          printf '%s' "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+
       - name: Deploy image
         run: ./scripts/cd/deploy.sh
